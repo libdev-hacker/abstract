@@ -14,6 +14,11 @@ if (x != NULL)\
 extern const char *default_entry_point;
 extern const WgslLowerEnv default_vulkan_version;
 
+typedef struct {
+    uint32_t* spirv_code;
+    size_t code_size;
+} SpirvCode;
+
 const SsirModule* ast_to_ir(
     WgslAstNode *code,
     const WgslResolver *resolver,

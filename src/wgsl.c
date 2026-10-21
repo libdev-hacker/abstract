@@ -9,7 +9,7 @@
 
 static const SsirModule* wgsl_to_ir(const char *code, const char *entry_point);
 
-const uint32_t* wgsl_shader_to_spirv(const char *wgsl_code, const char *entry_point) {
+const SpirvCode wgsl_shader_to_spirv(const char *wgsl_code, const char *entry_point) {
 
     const SsirModule *ssir = wgsl_to_ir(wgsl_code, entry_point);
 
@@ -18,11 +18,17 @@ const uint32_t* wgsl_shader_to_spirv(const char *wgsl_code, const char *entry_po
     uint32_t *spirv;
     size_t spirv_size = 0;
     SsirToSpirvResult spirv_result = ssir_to_spirv(ssir, &spirv_opts, &spirv, &spirv_size);
+    
     check_if_error(spirv_result, NULL);
 
     SAFE_FREE(ssir);
 
-    return spirv;
+    SpirvCode ret = {
+        .spirv_code = spirv,
+        .code_size = spirv_size
+    };
+
+    return ret;
 }
 
 const char* wgsl_shader_to_glsl(const char *wgsl_code, WgslStage stage, const char *entry_point) {

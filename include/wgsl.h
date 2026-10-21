@@ -3,7 +3,9 @@
 
 #include <simple_wgsl.h>
 
-const uint32_t* wgsl_shader_to_spirv(const char *wgsl_code, const char *entry_point);
+#include "common.h"
+
+const SpirvCode wgsl_shader_to_spirv(const char *wgsl_code, const char *entry_point);
 
 const char* wgsl_shader_to_glsl(const char *wgsl_code, WgslStage stage, const char *entry_point);
 

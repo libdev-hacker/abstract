@@ -19,7 +19,7 @@ static callback_t callback;
 static const SsirModule* glsl_to_ir(const char *glsl_code, WgslStage stage, const char *entry_point);
 
 
-const uint32_t* glsl_shader_to_spirv(const char *glsl_code, WgslStage stage, const char *entry_point) {
+const SpirvCode glsl_shader_to_spirv(const char *glsl_code, WgslStage stage, const char *entry_point) {
 
     const SsirModule *ssir = glsl_to_ir(glsl_code, stage, entry_point);
 
@@ -29,13 +29,18 @@ const uint32_t* glsl_shader_to_spirv(const char *glsl_code, WgslStage stage, con
 
     uint32_t *spirv;
     size_t spirv_size = 0;
-
     SsirToSpirvResult spirv_result = ssir_to_spirv(ssir, &opts, &spirv, &spirv_size);
+    
     check_if_error(spirv_result, NULL);
 
     SAFE_FREE(ssir)
 
-    return spirv;
+    SpirvCode ret = {
+        .spirv_code = spirv,
+        .code_size = spirv_size
+    };
+
+    return ret;
 }
 
 // State machine for function callback setter
